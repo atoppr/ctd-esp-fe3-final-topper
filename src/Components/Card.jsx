@@ -1,20 +1,26 @@
 import React from "react";
+import { useGlobalStates } from "./utils/global.context";
 
+const Card = ({ dentist, deleteFav }) => {
+  const { favDispatch } = useGlobalStates();
 
-const Card = ({ name, username, id }) => {
-
-  const addFav = ()=>{
-    // Aqui iria la logica para agregar la Card en el localStorage
-  }
+  const handleFavAction = () => {
+    if (deleteFav) {
+      deleteFav();
+    } else {
+      favDispatch({ type: 'ADD_FAV', payload: dentist });
+    }
+  };
 
   return (
     <div className="card">
-        {/* En cada card deberan mostrar en name - username y el id */}
-
-        {/* No debes olvidar que la Card a su vez servira como Link hacia la pagina de detalle */}
-
-        {/* Ademas deberan integrar la logica para guardar cada Card en el localStorage */}
-        <button onClick={addFav} className="favButton">Add fav</button>
+      <img className="imgdoctor" src="/images/doctor.jpg" alt="imagen del doctor" />
+      <h3>{dentist.name}</h3>
+      <h4>{dentist.username}</h4>
+      <p>{dentist.id}</p>
+      <button onClick={handleFavAction} className="favButton">
+        {deleteFav ? 'Eliminar Fav ⭐' : 'Agregar Fav ⭐'}
+      </button>
     </div>
   );
 };

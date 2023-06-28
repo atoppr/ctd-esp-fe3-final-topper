@@ -1,13 +1,45 @@
-import React from "react";
-
+import React, { useState } from "react";
 
 const Form = () => {
-  //Aqui deberan implementar el form completo con sus validaciones
+  const [data, setData] = useState({
+    nombre: "",
+    email: "",
+  });
+  const [show, setShow] = useState(false);
+  const [err, setErr] = useState(false);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+    const emailValidation = emailRegex.test(data.email);
+
+    if (data.nombre.length >= 5 && emailValidation && data.nombre[0] !== " ") {
+      setShow(true);
+      setErr(false);
+    } else {
+      setErr(true);
+    }
+  };
 
   return (
-    <div>
-      <form>
+    <div className="contact">
+      <form onSubmit={handleSubmit}>
+        <label>Nombre y Apellido</label>
+        <input
+          type="text"
+          value={data.nombre}
+          onChange={(e) => setData({ ...data, nombre: e.target.value })}
+        />
+        <label>Email</label>
+        <input
+          type="email"
+          value={data.email}
+          onChange={(e) => setData({ ...data, email: e.target.value })}
+        />
+        <button className="favButton" type="submit">Agregar</button>
       </form>
+      {err && <p className="error">Por favor, verifique su información de nuevo</p>}
+      {show && <p className="alert">Gracias {data.nombre}, te contactaremos vía correo electrónico</p>}
     </div>
   );
 };
